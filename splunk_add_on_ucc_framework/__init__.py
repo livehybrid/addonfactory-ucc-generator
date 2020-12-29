@@ -636,7 +636,7 @@ def main():
 
     if os.path.exists(args.config):
 
-        if args.ta_version:
+        if args.ta_version.strip():
             update_ta_version(args)
 
         # handle_update check schemaVersion and update globalConfig.json if required and return schema
@@ -705,13 +705,13 @@ def main():
     with open(os.path.join(outputdir, ta_name,'VERSION'), 'w') as version_file:
         version_file.write(version_str)
         version_file.write("\n")
-        version_file.write(version_splunk)
+        version_file.write(ta_version)
 
 
     manifest= None
     with open(os.path.abspath(os.path.join(outputdir, ta_name, "app.manifest")), "r") as manifest_file:
         manifest = json.load(manifest_file)
-        manifest['info']['id']['version'] = version_splunk
+        manifest['info']['id']['version'] = ta_version
     
     
     with open(os.path.abspath(os.path.join(outputdir, ta_name, "app.manifest")), "w") as manifest_file:
@@ -731,10 +731,10 @@ def main():
     if not 'ui' in app_config:
         app_config.add_section('ui')
 
-    app_config['launcher']['version']=version_splunk    
+    app_config['launcher']['version']=ta_version    
     app_config['launcher']['description']=manifest['info']['description']
     
-    app_config['id']['version']=version_splunk
+    app_config['id']['version']=ta_version
 
     app_config['install']['build']=str(int(time.time()))
     app_config['package']['id']=manifest['info']['id']['name'] 
