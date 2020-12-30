@@ -619,7 +619,7 @@ def main():
         default = version_splunk
     )
     args = parser.parse_args()
-
+    ta_version = args.ta_version.strip()
     if not os.path.exists(args.source):
         raise NotADirectoryError("{} not Found.".format(os.path.abspath(args.source)))
 
