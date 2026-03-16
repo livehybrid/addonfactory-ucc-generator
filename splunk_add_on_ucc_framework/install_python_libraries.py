@@ -389,7 +389,10 @@ def _remove_package(installation_path: str, package_name: str) -> bool:
                 raise ValueError(
                     f"Absolute paths are not allowed in RECORD files: {path}"
                 )
-            os.remove(os.path.join(installation_path, path))
+            try:
+                os.remove(os.path.join(installation_path, path))
+            except FileNotFoundError:
+                pass  # File already deleted or not present (e.g. bin scripts outside lib)
             top_level_dirs.add(path.split(separator)[0])
 
         for directory in top_level_dirs:
